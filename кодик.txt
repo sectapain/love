@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💫 Сюрприз под звёздами 💫</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a0f1e, #1a1f2f, #0d1b2a);
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Анимированные звёзды на фоне */
+        .stars-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700;
+            animation: twinkle 3s infinite ease-in-out;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .shooting-star {
+            position: absolute;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffd700, #ffffff);
+            animation: shoot 4s linear infinite;
+            opacity: 0;
+        }
+        
+        @keyframes shoot {
+            0% {
+                transform: translateX(-100px) translateY(0) rotate(15deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(calc(100vw + 100px)) translateY(200px) rotate(15deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Главная карточка */
+        .card {
+            background: rgba(10, 20, 40, 0.7);
+            backdrop-filter: blur(15px);
+            padding: 50px;
+            border-radius: 50px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 0 2px rgba(255, 215, 0, 0.2), 0 0 20px rgba(255, 215, 0, 0.2);
+            text-align: center;
+            z-index: 10;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            max-width: 600px;
+            margin: 20px;
+            animation: cardAppear 1.5s ease-out;
+            transform-origin: center;
+        }
+        
+        @keyframes cardAppear {
+            0% {
+                transform: scale(0.1) rotate(-5deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1) rotate(1deg);
+            }
+            100% {
+                transform: scale(1) rotate(0);
+                opacity: 1;
+            }
+        }
+        
+        .main-emoji {
+            font-size: 120px;
+            animation: glow 2s infinite;
+            display: inline-block;
+            filter: drop-shadow(0 0 20px #ffd700);
+            margin-bottom: 20px;
+        }
+        
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 20px #ffd700); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 40px #ffaa00); transform: scale(1.05); }
+        }
+        
+        h1 {
+            font-size: 3.5em;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.8em;
+            color: #b8c7de;
+            margin-bottom: 20px;
+            font-weight: 300;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        
+        .message-preview {
+            font-size: 1.3em;
+            color: #a0b3d9;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+        
+        .surprise-btn {
+            background: linear-gradient(135deg, #2a3f5e, #1a2a3f);
+            color: #ffd700;
+            border: 2px solid #ffd700;
+            padding: 18px 60px;
+            font-size: 1.5em;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3);
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .surprise-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.6), 0 0 30px #ffd700;
+            background: linear-gradient(135deg, #1f3147, #0f1a2a);
+        }
+        
+        .surprise-btn:active {
+            transform: translateY(0);
+        }
+        
+        .secret-message {
+            font-size: 2.5em;
+            color: #ffd700;
+            margin-top: 30px;
+            padding: 30px;
+            border-radius: 40px;
+            background: rgba(0, 10, 20, 0.6);
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.5s;
+            border: 2px dashed #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+        }
+        
+        .secret-message.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .secret-message span {
+            display: inline-block;
+            animation: bounceLetter 0.5s ease forwards;
+            text-shadow: 0 0 10px #ffd700;
+        }
+        
+        @keyframes bounceLetter {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+        
+        /* Контейнер для видео */
+        .video-container {
+            margin-top: 30px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px #ffd700;
+            transition: all 0.5s;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+        
+        .hidden-video {
+            display: none;
+        }
+        
+        .counter {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: rgba(255, 215, 0, 0.6);
+            font-size: 1.2em;
+            z-index: 20;
+        }
+        
+        /* Красивая рамка для карточки */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ffd700, #ffaa00, #ffd700, #ffaa00);
+            border-radius: 52px;
+            z-index: -1;
+            background-size: 400% 400%;
+            animation: gradientShift 6s ease infinite;
+            opacity: 0.5;
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Звёздное небо -->
+    <div class="stars-container" id="starsContainer"></div>
+    
+    <!-- Падающие звёзды -->
+    <div id="shootingStars"></div>
+    
+    <!-- Главная карточка -->
+    <div class="card">
+        <div class="main-emoji" id="mainEmoji">🌙</div>
+        
+        <h1 id="nameTitle">Для [ВПИШИ ИМЯ]</h1>
+        
+        <div class="subtitle">Под этим звёздным небом</div>
+        
+        <div class="message-preview">
+            ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⣤⣶⣶⣶⣶⣶⣤⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀<br>
+            Я загадал желание... и оно сбылось, когда встретил тебя
+        </div>
+        
+        <button class="surprise-btn" onclick="revealSurprise()" id="surpriseBtn">
+            ✨ НАЖМИ МЕНЯ ✨
+        </button>
+        
+        <div class="secret-message" id="secretMessage">
+            💫<br>
+            <span id="personalMessage"></span><br>
+            💫
+        </div>
+        
+        <!-- Контейнер для YouTube видео -->
+        <div id="videoWrapper" class="video-container hidden-video">
+            <a href="https://www.youtube.com/watch?v=lvB8DTMhu6I" target="_blank" style="color: #ffd700; font-size: 1.2em; text-decoration: none; border: 2px solid #ffd700; padding: 10px 20px; border-radius: 40px; display: inline-block;">🎵 Послушать песню на YouTube 🎵</a>
+        </div>
+    </div>
+    
+    <!-- Счетчик звёзд -->
+    <div class="counter" id="starCounter">✨ x 0</div>
+
+    <!-- Подключаем библиотеку конфетти (золотое конфетти!) и YouTube API -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    
+    <script>
+        // ========== НАСТРОЙКИ ==========
+        const GIRL_NAME = "Полишки Сфчиковой"; // <--- ВПИШИ СЮДА ИМЯ ДЕВУШКИ!
+        const PERSONAL_MESSAGE = "Ты — Лучшая ⭐"; // <--- И СВОЁ СООБЩЕНИЕ
+        
+        // ========== ЗАПОЛНЯЕМ ИМЯ ==========
+        document.getElementById('nameTitle').innerHTML = `Для $Полишки Сфчиковой`;
+        document.getElementById('personalMessage').innerText = Ты — Лучшая ⭐;
+        
+        // ========== СОЗДАЁМ ЗВЁЗДЫ ==========
+        const starsContainer = document.getElementById('starsContainer');
+        const starCounter = document.getElementById('starCounter');
+        let starCount = 0;
+        
+        function createStar() {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const size = Math.random() * 4 + 2;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.background = Math.random() > 0.7 ? '#ffd700' : '#ffffff';
+            starsContainer.appendChild(star);
+            
+            starCount++;
+            starCounter.innerHTML = `✨ x ${starCount}`;
+            
+            setTimeout(() => {
+                star.remove();
+            }, 10000);
+        }
+        
+        // Создаём падающую звезду
+        function createShootingStar() {
+            const shootingStar = document.createElement('div');
+            shootingStar.className = 'shooting-star';
+            shootingStar.style.top = Math.random() * 60 + '%';
+            shootingStar.style.left = '0';
+            shootingStar.style.animationDelay = Math.random() * 5 + 's';
+            document.getElementById('shootingStars').appendChild(shootingStar);
+            
+            setTimeout(() => {
+                shootingStar.remove();
+            }, 5000);
+        }
+        
+        // Создаём звёзды каждые 200мс
+        setInterval(createStar, 200);
+        // Создаём падающие звёзды каждые 5 секунд
+        setInterval(createShootingStar, 5000);
+        
+        // ========== YOUTUBE ПЛЕЕР ==========
+        let player;
+        
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtubeVideo', {
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+        
+        function onPlayerReady(event) {
+            console.log("YouTube плеер готов");
+        }
+        
+        // ========== ГЛАВНЫЙ СЮРПРИЗ ==========
+        function revealSurprise() {
+            const secretMsg = document.getElementById('secretMessage');
+            const btn = document.getElementById('surpriseBtn');
+            const mainEmoji = document.getElementById('mainEmoji');
+            const videoWrapper = document.getElementById('videoWrapper');
+            
+            // Меняем эмодзи
+            mainEmoji.innerHTML = '⭐';
+            
+            // Показываем сообщение
+            secretMsg.classList.add('show');
+            
+            // Показываем видео
+            videoWrapper.classList.remove('hidden-video');
+            
+            // Запускаем видео
+            if (player && player.playVideo) {
+                player.playVideo();
+            } else {
+                // Альтернативный способ запуска
+                document.getElementById('youtubeVideo').src = "https://www.youtube.com/embed/lvB8DTMhu6I?autoplay=1";
+            }
+            
+            // Прячем кнопку
+            btn.style.transform = 'scale(0)';
+            btn.style.opacity = '0';
+            setTimeout(() => {
+                btn.style.display = 'none';
+            }, 300);
+            
+            // Золотое конфетти!
+            confetti({
+                particleCount: 150,
+                spread: 100,
+                origin: { y: 0.6 },
+                colors: ['#ffd700', '#ffaa00', '#ffffff', '#ffcc00', '#ffdb58']
+            });
+            
+            setTimeout(() => {
+                confetti({
+                    particleCount: 100,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ffd700', '#ffffff']
+                });
+                confetti({
+                    particleCount: 100,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ffaa00', '#ffffff']
+                });
+            }, 200);
+            
+            // Анимация букв
+            const messageSpan = document.getElementById('personalMessage');
+            const letters = messageSpan.innerText.split('');
+            messageSpan.innerHTML = '';
+            letters.forEach((letter, index) => {
+                const span = document.createElement('span');
+                span.textContent = letter;
+                span.style.animation = `bounceLetter 0.5s ease ${index * 0.05}s forwards`;
+                messageSpan.appendChild(span);
+            });
+            
+            // Создаём ещё падающих звёзд
+            for(let i = 0; i < 5; i++) {
+                setTimeout(createShootingStar, i * 300);
+            }
+        }
+        
+        // ========== ЭФФЕКТЫ ==========
+        document.getElementById('mainEmoji').addEventListener('mouseover', function() {
+            this.style.transform = 'scale(1.2)';
+        });
+        
+        document.getElementById('mainEmoji').addEventListener('mouseout', function() {
+            this.style.transform = 'scale(1)';
+        });
+        
+        window.onload = function() {
+            console.log('✨ Сюрприз готов, ' + GIRL_NAME + '!');
+        };
+    </script>
+</body>
+</html>
